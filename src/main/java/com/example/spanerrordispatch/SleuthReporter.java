@@ -29,11 +29,7 @@ public class SleuthReporter {
 			return;
 		}
 		if (previous == null) {
-			this.security = this.tracer.nextSpan()
-					.name("authenticated")
-					.tag("authentication.type", getAuthenticationType(current))
-					.tag("authentication.authorities", String.valueOf(current.getAuthorities()))
-					.start();
+			this.security = this.tracer.nextSpan().name("authenticated").start();
 			return;
 		}
 		if (current == null) {
@@ -41,16 +37,5 @@ public class SleuthReporter {
 			return;
 		}
 		throw new IllegalStateException("For the use case the sample covers, this should not be possible.");
-	}
-
-	private String getAuthenticationType(Authentication authentication) {
-		String name = authentication.getClass().getSimpleName();
-		if (name.endsWith("AuthenticationToken")) {
-			return name.substring(0, name.lastIndexOf("AuthenticationToken"));
-		}
-		if (name.endsWith("Authentication")) {
-			return name.substring(0, name.lastIndexOf("Authentication"));
-		}
-		return name;
 	}
 }
